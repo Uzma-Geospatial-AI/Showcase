@@ -1,0 +1,129 @@
+<!-- ============ HERO ============ -->
+<section id="home" class="hero">
+  <div class="hero__bg">
+    <div class="hero__bg-sat"></div>
+    <div class="hero__bg-fade"></div>
+    <div class="hero__bg-glow"></div>
+    <div class="hero__grid-overlay grid-overlay"></div>
+  </div>
+
+  <div class="container hero__inner">
+    <div>
+      <span class="eyebrow reveal">
+        <i data-lucide="sparkles"></i>
+        Geospatial AI Sdn Bhd · An Uzma Group Company
+      </span>
+      <h1 class="reveal">AI-Powered <span class="gradient-text">Geospatial Intelligence</span> Platform</h1>
+      <p class="hero__lead reveal">
+        Transforming Earth Observation, Land Monitoring, and Spatial Analytics into
+        actionable intelligence for government, agriculture, and enterprise —
+        engineered in Malaysia, deployed across Southeast Asia.
+      </p>
+      <div class="hero__cta reveal">
+        <button type="button" data-jump="solutions" class="btn btn--primary">
+          Explore Solutions <i data-lucide="arrow-right"></i>
+        </button>
+        <button type="button" data-jump="demos" class="btn btn--secondary">
+          <i data-lucide="play-circle"></i> View Live Demo
+        </button>
+      </div>
+      <div id="hero-stats" class="hero-stats"></div>
+    </div>
+
+    <div>
+      <!-- Animated globe: rotating planet + orbiting satellites -->
+      <div class="globe" aria-hidden="true">
+        <div class="globe__glow"></div>
+        <div class="globe__sphere">
+          <svg id="globe-surface" class="globe__map spin-surface" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet"></svg>
+          <div class="globe__shade"></div>
+          <!-- expanding ring where the satellite photographs Earth -->
+          <div class="globe__capture"></div>
+        </div>
+
+        <!-- orbital marker (kept for the orbiting motion) -->
+        <svg class="globe__orbits" viewBox="0 0 420 420" preserveAspectRatio="xMidYMid meet">
+          <g transform="rotate(20 210 210)">
+            <ellipse class="orbit-path orbit-path--faint" cx="210" cy="210" rx="150" ry="46" />
+            <g class="sat sat--mini">
+              <circle class="sat__dot" cx="0" cy="0" r="2.8" />
+              <animate attributeName="opacity" values="1;1;0.15;1;1" keyTimes="0;0.27;0.5;0.73;1" dur="9.5s" repeatCount="indefinite" />
+              <animateMotion dur="9.5s" repeatCount="indefinite" rotate="auto"
+                             path="M 60,210 a 150,46 0 1,0 300,0 a 150,46 0 1,0 -300,0" />
+            </g>
+          </g>
+        </svg>
+
+        <!-- scan beam from the satellite down to Earth (pulses during capture) -->
+        <div class="globe__beam"></div>
+
+        <!-- satellite (drawn) — floats above Earth and photographs it -->
+        <div class="globe__satellite">
+          <svg class="globe__sat-svg" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <defs>
+              <linearGradient id="satBody" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#cf8460" />
+                <stop offset="0.45" stop-color="#9c4f31" />
+                <stop offset="1" stop-color="#5f2c1a" />
+              </linearGradient>
+              <linearGradient id="satBarrel" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#a85f3e" />
+                <stop offset="1" stop-color="#4a2114" />
+              </linearGradient>
+              <linearGradient id="satPanel" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#2c3340" />
+                <stop offset="1" stop-color="#0f1218" />
+              </linearGradient>
+              <radialGradient id="satLens" cx="0.4" cy="0.4" r="0.7">
+                <stop offset="0" stop-color="#5b6470" />
+                <stop offset="0.4" stop-color="#1c2026" />
+                <stop offset="1" stop-color="#000000" />
+              </radialGradient>
+              <linearGradient id="satGold" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#f0cf86" />
+                <stop offset="1" stop-color="#a97f2e" />
+              </linearGradient>
+            </defs>
+
+            <g transform="rotate(34 100 100)">
+              <!-- panel support arms -->
+              <rect x="116" y="92" width="20" height="6" rx="2" fill="#3a3f47" />
+              <rect x="116" y="104" width="20" height="6" rx="2" fill="#3a3f47" />
+
+              <!-- solar panels (two wings) -->
+              <g stroke="rgba(255,255,255,0.10)" stroke-width="0.8">
+                <polygon points="128,50 196,44 196,86 128,92" fill="url(#satPanel)" />
+                <polygon points="128,108 196,114 196,156 128,150" fill="url(#satPanel)" />
+                <line x1="145" y1="47" x2="145" y2="91" /><line x1="162" y1="46" x2="162" y2="89" /><line x1="179" y1="45" x2="179" y2="88" />
+                <line x1="128" y1="71" x2="196" y2="65" />
+                <line x1="145" y1="109" x2="145" y2="151" /><line x1="162" y1="110" x2="162" y2="153" /><line x1="179" y1="112" x2="179" y2="154" />
+                <line x1="128" y1="129" x2="196" y2="135" />
+              </g>
+
+              <!-- main body (copper) -->
+              <rect x="54" y="76" width="74" height="48" rx="12" fill="url(#satBody)" stroke="rgba(0,0,0,0.25)" stroke-width="1" />
+              <rect x="58" y="80" width="66" height="9" rx="4" fill="rgba(255,255,255,0.18)" />
+
+              <!-- gold MLI foil patch -->
+              <rect x="74" y="99" width="34" height="20" rx="2" fill="url(#satGold)" />
+              <g stroke="rgba(90,55,10,0.5)" stroke-width="0.8">
+                <line x1="83" y1="99" x2="83" y2="119" /><line x1="92" y1="99" x2="92" y2="119" /><line x1="101" y1="99" x2="101" y2="119" />
+                <line x1="74" y1="106" x2="108" y2="106" /><line x1="74" y1="113" x2="108" y2="113" />
+              </g>
+
+              <!-- camera lens barrel + aperture (faces Earth) -->
+              <rect x="34" y="82" width="26" height="36" rx="6" fill="url(#satBarrel)" />
+              <ellipse cx="35" cy="100" rx="9" ry="20" fill="#1a1d22" />
+              <ellipse cx="36" cy="100" rx="6.5" ry="16.5" fill="url(#satLens)" />
+              <ellipse cx="33" cy="94" rx="2.2" ry="4" fill="rgba(255,255,255,0.35)" />
+              <!-- shutter flash at the moment of capture -->
+              <circle class="sat-lens-flash" cx="35" cy="100" r="15" fill="#fff5e6" />
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__fade"></div>
+</section>

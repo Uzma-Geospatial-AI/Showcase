@@ -1,0 +1,52 @@
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="section">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <span class="eyebrow">Contact</span>
+        <h2 class="heading">Let's build your <span class="gradient-text">geospatial advantage</span></h2>
+        <p class="contact-grid__lead">
+          Request a private demo, discuss a pilot, or get in touch with our team to scope a
+          custom geospatial intelligence deployment.
+        </p>
+        <div class="contact-cards">
+          <a href="mailto:geospatial.ai@uzmagroup.com" class="glass contact-card">
+            <i data-lucide="mail" style="color:var(--orange-300)"></i>
+            <div>
+              <div class="contact-card__label">Email</div>
+              <div class="contact-card__value">geospatial.ai@uzmagroup.com</div>
+            </div>
+          </a>
+          <a href="tel:+60300000000" class="glass contact-card">
+            <i data-lucide="phone" style="color:var(--brown-300)"></i>
+            <div>
+              <div class="contact-card__label">Call</div>
+              <div class="contact-card__value">+60 3 0000 0000</div>
+            </div>
+          </a>
+        </div>
+        <div class="map-wrap">
+          <button id="map-fs" type="button" class="map-fs-btn" title="Enlarge map" aria-label="Enlarge map"><i data-lucide="maximize"></i></button>
+          <div id="map" class="map"></div>
+        </div>
+      </div>
+
+      <form id="contact-form" class="glass form">
+        <div class="form__row">
+          <label class="field-label">Name<input name="name" required class="field" /></label>
+          <label class="field-label">Organization<input name="organization" class="field" /></label>
+        </div>
+        <label class="field-label">Email<input name="email" type="email" required class="field" /></label>
+        <label class="field-label">Message<textarea name="message" rows="5" required class="field"></textarea></label>
+        <div class="form__actions">
+          <button type="submit" class="btn btn--primary"><i data-lucide="send"></i> Request Demo</button>
+          <a href="mailto:geospatial.ai@uzmagroup.com" class="btn btn--secondary">Contact Team</a>
+        </div>
+        <div id="form-success" class="form-success hidden">
+          <i data-lucide="check-circle-2"></i>
+          Thanks — we'll be in touch within one business day.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

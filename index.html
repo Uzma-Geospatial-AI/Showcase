@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="public/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="description"
+      content="Geospatial AI Sdn Bhd — AI-powered Earth Observation, land-use mapping, and interactive WebGIS solutions."
+    />
+    <title>Geospatial AI Sdn Bhd — Earth Observation & WebGIS</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Leaflet (map) -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+
+    <!-- Site styles (all CSS lives in styles.css) -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <!--
+      This page is assembled from small HTML files in /partials.
+      Each [data-include] is replaced at runtime by app.js (loadIncludes()).
+      NOTE: this needs a local server (e.g. VS Code "Live Server"); opening the
+      file directly with a double-click (file://) will leave the page blank
+      because browsers block fetch() on the file:// protocol.
+    -->
+    <div class="page">
+      <div data-include="partials/navbar.html"></div>
+
+      <main class="main">
+        <div id="page-home">
+          <div data-include="partials/hero.html"></div>
+          <div data-include="partials/solutions.html"></div>
+          <div data-include="partials/demos.html"></div>
+          <div data-include="partials/metrics.html"></div>
+          <div data-include="partials/technology.html"></div>
+          <div data-include="partials/applications.html"></div>
+          <div data-include="partials/contact.html"></div>
+        </div>
+        <div id="page-demo" class="hidden"></div>
+      </main>
+
+      <div data-include="partials/footer.html"></div>
+    </div>
+
+    <!-- Libraries (CDN) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
