@@ -31,15 +31,15 @@ const platforms = [
     tag: 'WebGIS · Visualization',
   },
   {
-    id: 'mpob',
-    title: 'MPOB Palm Grove Alert System',
+    id: 'palmgrove',
+    title: 'PalmGrove',
     short: 'Palm-oil plantation monitoring with AI change detection.',
     description:
       'Monitor palm oil plantations using satellite imagery and AI-powered change detection. Detect deforestation, encroachment, and yield anomalies in near-real time.',
     icon: 'leaf',
     accent: 'grad-1',
     features: ['Deforestation alerts', 'Plantation monitoring', 'ESG compliance', 'Environmental analytics'],
-    url: 'https://digitalearth.uzmageoai.com/palmgrove/login',
+    url: 'https://palmgrove.uzmadigitalearth.app/',
     tag: 'Agriculture · ESG',
     secure: true, // protected platform (login) — can't be embedded, requires a click to launch
   },
@@ -52,13 +52,24 @@ const platforms = [
     icon: 'badge-check',
     accent: 'grad-2',
     features: ['MSPO certification tracking', 'Plantation boundary mapping', 'Sustainability compliance', 'Satellite monitoring'],
-    url: 'https://digitalearth.uzmageoai.com/mspo',
+    url: 'https://mspo.uzmadigitalearth.app/',
     tag: 'Sustainability · ESG',
-    secure: true, // protected platform (login) — can't be embedded, requires a click to launch
+  },
+  {
+    id: 'spacein',
+    title: 'SpaceIn',
+    short: 'Satellite-connected IoT monitoring for remote assets.',
+    description:
+      'Space-based IoT platform linking ground sensors to satellite intelligence — track remote assets, environmental conditions, and field telemetry on a live geospatial dashboard.',
+    icon: 'satellite-dish',
+    accent: 'grad-3',
+    features: ['IoT sensor tracking', 'Satellite connectivity', 'Real-time telemetry', 'Remote asset monitoring'],
+    url: 'https://iot.uzmadigitalearth.app/',
+    tag: 'IoT · Satellite',
   },
 ];
 
-const techStack = ['Python', 'FastAPI', 'Leaflet', 'GeoPandas', 'PyTorch', 'Rasterio', 'QGIS', 'PostGIS', 'Machine Learning', 'Remote Sensing'];
+const techStack = ['Python', 'FastAPI', 'Leaflet', 'GeoPandas', 'PyTorch', 'Rasterio', 'QGIS', 'PostGIS', 'Machine Learning', 'Remote Sensing', 'HTML', 'CSS', 'SQL', 'Java', 'JavaScript', 'Node.js'];
 
 const pipelineSteps = [
   { label: 'Satellite Imagery', sub: 'Sentinel-2 · Planet · Maxar', icon: 'satellite' },
@@ -81,14 +92,14 @@ const applications = [
 ];
 
 const metrics = [
-  { value: 10000000, label: 'Detected Buildings', suffix: '+', format: 'compact' },
-  { value: 100000, label: 'Satellite Images', suffix: '+', format: 'compact' },
-  { value: 95, label: 'AI Accuracy', suffix: '%', format: 'plain' },
+  { value: 1000000, label: 'Detected Buildings', suffix: '+', format: 'compact' },
+  { value: 50000, label: 'Satellite Images', suffix: '+', format: 'compact' },
+  { value: 90, label: 'AI Accuracy', suffix: '%', format: 'plain' },
   { value: 24, label: 'Monitoring', suffix: '/7', format: 'plain' },
 ];
 
 const heroStats = [
-  { value: '4', label: 'Platforms' },
+  { value: '5', label: 'Platforms' },
   { value: 'AI', label: 'Analytics' },
   { value: '24/7', label: 'Satellite Monitoring' },
   { value: 'WebGIS', label: 'Interactive GIS' },
@@ -103,7 +114,7 @@ const navItems = [
   { label: 'Contact', target: 'contact' },
 ];
 
-const demoTabLabels = { mpob: 'MPOB Dashboard', footprint: 'Building Footprint', border: 'Border Visualization', mspo: 'MSPO Monitoring' };
+const demoTabLabels = { palmgrove: 'PalmGrove', footprint: 'Building Footprint', border: 'Border Visualization', mspo: 'MSPO Monitoring', spacein: 'SpaceIn' };
 
 // Footer "Connect" links — rendered by JS (each <li> parsed individually) so a
 // long run of inline-SVG siblings can't trip up the HTML parser.
@@ -418,7 +429,7 @@ function iframeFrame(src, title, height = 'min(78vh, 720px)') {
 }
 
 /* ----------------------------- Secure launch gate ----------------------------- */
-// Some platforms (MPOB, MSPO) are protected by their own login and refuse to be
+// Some platforms (PalmGrove, MSPO) are protected by their own login and refuse to be
 // framed (X-Frame-Options). Instead of embedding and failing, we show a "gate"
 // the visitor must click to open the live platform in a new tab.
 function secureGate(platform, height = 'min(78vh, 720px)') {
@@ -442,7 +453,7 @@ function secureGate(platform, height = 'min(78vh, 720px)') {
 function buildDemos() {
   const tabsWrap = $('#demo-tabs');
   const panel = $('#demo-panel');
-  let active = 'footprint'; // default to a working demo (MPOB/palmgrove blocks embedding)
+  let active = 'footprint'; // default to the first demo tab
 
   const render = () => {
     tabsWrap.innerHTML = '';

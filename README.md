@@ -1,15 +1,17 @@
 # Geospatial AI Sdn Bhd — Official Website
 
 A modern, responsive React + Vite website for **Geospatial AI Sdn Bhd**, an
-Uzma Group company. The site showcases three AI-powered geospatial
+Uzma Group company. The site showcases five AI-powered geospatial
 intelligence platforms and is themed using the Uzma brand palette
 (`#E26F3A` orange · `#7C4109` brown · `#656567` gray).
 
 The site showcases:
 
-1. **MPOB Palm Grove Alert System** — https://digitalearth.uzmageoai.com/palmgrove/alerts/0104030006333
-2. **Land Use & Building Footprint Detection** — https://uzma-geospatial-ai.github.io/building_footprint_demo/#
-3. **Malaysia–Thailand Border Visualization** — https://zh4rif.github.io/MY_TH_BEZ/
+1. **Land Use & Building Footprint Detection** — https://uzma-geospatial-ai.github.io/building_footprint_demo/#
+2. **Malaysia–Thailand Border Visualization** — https://zh4rif.github.io/MY_TH_BEZ/
+3. **MSPO Sustainability Monitoring** — https://mspo.uzmadigitalearth.app/
+4. **PalmGrove** — https://palmgrove.uzmadigitalearth.app/
+5. **SpaceIn** — https://iot.uzmadigitalearth.app/
 
 Designed as an **Enterprise GIS / Modern SaaS dashboard** with dark-mode
 satellite imagery, animated Framer-Motion transitions, and Leaflet map previews
