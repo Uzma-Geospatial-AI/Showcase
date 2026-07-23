@@ -164,7 +164,7 @@ function applyTheme(theme) {
 }
 function initTheme() {
   const stored = localStorage.getItem(STORAGE_KEY);
-  applyTheme(stored === 'light' || stored === 'dark' ? stored : 'dark');
+  applyTheme(stored === 'light' || stored === 'dark' ? stored : 'light');
   $('#theme-toggle').addEventListener('click', () => {
     applyTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark');
   });
@@ -257,6 +257,7 @@ function buildGlobe() {
 /* ----------------------------- Hero stats ----------------------------- */
 function buildHeroStats() {
   const grid = $('#hero-stats');
+  if (!grid) return;
   heroStats.forEach((stat) => {
     grid.appendChild(
       el(`<div class="glass stat">
@@ -566,6 +567,97 @@ function initMap() {
   }
 }
 
+/* ----------------------------- Hero live satellite map (PMTiles) ----------------------------- */
+// Renders the raster PNG satellite archive (Kuantan) straight from S3 using
+// PMTiles range requests + a tiny custom Leaflet grid layer.
+const HERO_PMTILES = 'https://digitalearthbasemap.s3.ap-southeast-1.amazonaws.com/kuantan1.pmtiles';
+function initHeroMap() {
+  if (typeof L === 'undefined' || typeof pmtiles === 'undefined' || !$('#hero-map')) return;
+  const archive = new pmtiles.PMTiles(HERO_PMTILES);
+  let anyTile = false;
+
+  const PMLayer = L.GridLayer.extend({
+    createTile(coords, done) {
+      const img = document.createElement('img');
+      img.alt = '';
+      archive
+        .getZxy(coords.z, coords.x, coords.y)
+        .then((res) => {
+          if (!res || !res.data) { done(null, img); return; }
+          const url = URL.createObjectURL(new Blob([res.data]));
+          img.onload = () => { URL.revokeObjectURL(url); anyTile = true; done(null, img); };
+          img.onerror = () => { URL.revokeObjectURL(url); done(null, img); };
+          img.src = url;
+        })
+        .catch((err) => done(err, img));
+      return img;
+    },
+  });
+
+  const bounds = L.latLngBounds([3.68953, 103.253], [3.8887, 103.361]);
+  const map = L.map('hero-map', {
+    zoomControl: false,
+    scrollWheelZoom: false,
+    minZoom: 8,
+    maxZoom: 18,
+    maxBounds: bounds.pad(0.4),
+    attributionControl: true,
+  });
+  map.attributionControl.setPrefix(false);
+  new PMLayer({ minZoom: 8, maxZoom: 18, bounds, attribution: '© Uzma Digital Earth · Kuantan' }).addTo(map);
+  map.fitBounds(bounds);
+  L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+  const coordsEl = $('#hero-map-coords');
+  const fmt = (n, pos, neg) => `${Math.abs(n).toFixed(3)}°${n >= 0 ? pos : neg}`;
+  const updateCoords = () => {
+    if (!coordsEl) return;
+    const c = map.getCenter();
+    coordsEl.textContent = `${fmt(c.lat, 'N', 'S')} · ${fmt(c.lng, 'E', 'W')}`;
+  };
+  map.on('move', updateCoords);
+  updateCoords();
+
+  // Gentle intro nudge so the panel feels alive on load.
+  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReduced) {
+    setTimeout(() => { try { map.flyTo(bounds.getCenter(), 14, { duration: 2.4 }); } catch (e) {} }, 800);
+  }
+
+  // Fallback: if S3/CORS blocks the tiles, show a friendly note instead of a black box.
+  setTimeout(() => {
+    if (anyTile) return;
+    const card = $('#hero-map');
+    if (card) {
+      card.innerHTML =
+        '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;text-align:center;padding:1.25rem;color:#cfcfd2;font-size:.82rem">' +
+        '<i data-lucide="satellite" style="color:#e98249;width:1.6rem;height:1.6rem"></i>' +
+        '<div>Live satellite tiles over <strong>Kuantan</strong></div>' +
+        '<a href="https://vision.uzmadigitalearth.app/" target="_blank" rel="noopener noreferrer" style="color:#e98249;font-weight:600">Open UZMA-Vision ↗</a></div>';
+      refreshIcons();
+    }
+  }, 6000);
+}
+
+/* ----------------------------- Hero parallax (subtle) ----------------------------- */
+function initHeroParallax() {
+  const sat = $('.hero-sat');
+  if (!sat) return;
+  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return;
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = Math.min(window.scrollY, 700);
+      sat.style.translate = `0 ${y * 0.12}px`;
+      ticking = false;
+    });
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+}
+
 /* ----------------------------- Scroll reveal ----------------------------- */
 function initReveal() {
   const nodes = document.querySelectorAll('.reveal, .counter');
@@ -736,6 +828,8 @@ function init() {
   safe('demos', buildDemos);
   safe('contactForm', initContactForm);
   safe('map', initMap);
+  safe('heroMap', initHeroMap);
+  safe('heroParallax', initHeroParallax);
   safe('icons', refreshIcons);
   safe('reveal', initReveal);
   window.addEventListener('hashchange', handleRoute);
