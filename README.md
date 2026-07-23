@@ -5,7 +5,7 @@ Uzma Group company. The site showcases five AI-powered geospatial
 intelligence platforms and is themed using the Uzma brand palette
 (`#E26F3A` orange · `#7C4109` brown · `#656567` gray).
 
-The site showcases:
+The site showcases: https://showcase.uzmadigitalearth.app/
 
 1. **Land Use & Building Footprint Detection** — https://uzma-geospatial-ai.github.io/building_footprint_demo/#
 2. **Malaysia–Thailand Border Visualization** — https://zh4rif.github.io/MY_TH_BEZ/
