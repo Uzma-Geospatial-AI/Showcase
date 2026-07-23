@@ -67,18 +67,6 @@ const platforms = [
     url: 'https://iot.uzmadigitalearth.app/',
     tag: 'IoT · Satellite',
   },
-  {
-    id: 'vision',
-    title: 'UZMA-Vision',
-    short: 'Live satellite intelligence on an interactive 3D map.',
-    description:
-      'Satellite Intelligence Platform streaming live UzmaSat-1 feeds onto an interactive 3D map — real-time earth observation, layered geospatial analytics, and multi-region monitoring across Malaysia.',
-    icon: 'globe-lock',
-    accent: 'grad-1',
-    features: ['Live UzmaSat-1 feed', '3D layer mapping', 'Real-time visualization', 'Multi-region coverage'],
-    url: 'https://vision.uzmadigitalearth.app/',
-    tag: 'Satellite · Real-time',
-  },
 ];
 
 const techStack = ['Python', 'FastAPI', 'Leaflet', 'GeoPandas', 'PyTorch', 'Rasterio', 'QGIS', 'PostGIS', 'Machine Learning', 'Remote Sensing', 'HTML', 'CSS', 'SQL', 'Java', 'JavaScript', 'Node.js'];
@@ -111,7 +99,7 @@ const metrics = [
 ];
 
 const heroStats = [
-  { value: '6', label: 'Platforms' },
+  { value: '5', label: 'Platforms' },
   { value: 'AI', label: 'Analytics' },
   { value: '24/7', label: 'Satellite Monitoring' },
   { value: 'WebGIS', label: 'Interactive GIS' },
@@ -126,7 +114,7 @@ const navItems = [
   { label: 'Contact', target: 'contact' },
 ];
 
-const demoTabLabels = { palmgrove: 'PalmGrove', footprint: 'Building Footprint', border: 'Border Visualization', mspo: 'MSPO Monitoring', spacein: 'SpaceIn', vision: 'UZMA-Vision' };
+const demoTabLabels = { palmgrove: 'PalmGrove', footprint: 'Building Footprint', border: 'Border Visualization', mspo: 'MSPO Monitoring', spacein: 'SpaceIn' };
 
 // Footer "Connect" links — rendered by JS (each <li> parsed individually) so a
 // long run of inline-SVG siblings can't trip up the HTML parser.
@@ -592,7 +580,8 @@ function initHeroMap() {
     { maxZoom: 19, attribution: 'Imagery © Esri · Uzma Digital Earth' }
   ).addTo(map);
 
-  map.fitBounds(bounds);
+  // Open zoomed straight in to level 16 over Kuantan.
+  map.setView(bounds.getCenter(), 16);
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
   // Try to overlay the exact UzmaSat PMTiles archive on top. This only renders
@@ -636,11 +625,6 @@ function initHeroMap() {
   map.on('move', updateCoords);
   updateCoords();
 
-  // Gentle intro nudge so the panel feels alive on load.
-  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!prefersReduced) {
-    setTimeout(() => { try { map.flyTo(bounds.getCenter(), 14, { duration: 2.4 }); } catch (e) {} }, 800);
-  }
 }
 
 /* ----------------------------- Hero parallax (subtle) ----------------------------- */
