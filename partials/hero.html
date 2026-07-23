@@ -1,4 +1,4 @@
-<!-- ============ HERO — half hardware · half live imagery ============ -->
+<!-- ============ HERO — upright satellite cut by the seam · live imagery ============ -->
 <section id="home" class="hero hero--split">
   <!-- decorative accents -->
   <div class="hero-stripes" aria-hidden="true"></div>
@@ -6,8 +6,15 @@
   <div class="hero-dots" aria-hidden="true"></div>
   <span class="hero-side">Intelligence in our orbit</span>
 
+  <!-- the satellite, stood upright on the white/orange seam so the divide cuts it in half -->
+  <div class="hero-sat-wrap">
+    <div class="hero-sat__ring" aria-hidden="true"></div>
+    <img class="hero-sat" src="public/brand/satellite-hero.png"
+         alt="UzmaSat-1 Earth-observation satellite" width="1024" height="1024" />
+  </div>
+
   <div class="hero-grid">
-    <!-- LEFT: label + wordmark -->
+    <!-- LEFT (white): wordmark -->
     <div class="hero-col hero-col--l">
       <h1 class="hero-title">
         <span class="reveal-up" style="--d:.05s">EARTH</span>
@@ -26,37 +33,25 @@
       </a>
     </div>
 
-    <!-- CENTRE: the satellite, stood upright and split in half —
-         left half the hardware, right half the live imagery it captures -->
-    <div class="hero-obj reveal-up" style="--d:.28s">
-      <div class="hero-obj__half hero-obj__sat">
-        <img class="hero-sat" src="public/brand/satellite-hero.png"
-             alt="UzmaSat-1 Earth-observation satellite" width="1024" height="1024" />
-        <span class="hero-obj__tag">Hardware</span>
-      </div>
-      <div class="hero-obj__half hero-obj__data">
-        <div id="hero-map" class="hero-map"></div>
-        <div class="hero-obj__bar">
-          <span class="hero-obj__pulse"></span>
-          <span class="hero-obj__live">UzmaSat-1 · Kuantan</span>
-          <span class="hero-obj__coords" id="hero-map-coords">3.789°N · 103.307°E</span>
-        </div>
-        <span class="hero-obj__tag hero-obj__tag--o">Imagery</span>
-      </div>
-      <div class="hero-obj__seam" aria-hidden="true"></div>
-    </div>
-
-    <!-- RIGHT: live data wordmark + CTA -->
+    <!-- RIGHT (orange): live data + the imagery it captures -->
     <div class="hero-col hero-col--r">
       <h2 class="hero-title hero-title--right">
         <span class="reveal-up" style="--d:.1s">LIVE</span>
         <span class="reveal-up hero-title--w" style="--d:.2s">DATA</span>
       </h2>
-      <p class="hero-lead hero-lead--r reveal-up" style="--d:.55s">
+      <div class="hero-map-card reveal-up" style="--d:.3s">
+        <div class="hero-map-card__bar">
+          <span class="hero-map-card__pulse"></span>
+          <span class="hero-map-card__label">UzmaSat-1 · Kuantan, MY</span>
+          <span class="hero-map-card__coords" id="hero-map-coords">3.789°N · 103.307°E</span>
+        </div>
+        <div id="hero-map" class="hero-map"></div>
+      </div>
+      <p class="hero-lead hero-lead--r reveal-up" style="--d:.4s">
         Streamed tile-by-tile — real satellite imagery over Kuantan, Malaysia,
         served straight from our Digital Earth basemap.
       </p>
-      <button type="button" data-jump="demos" class="btn btn--primary hero-cta reveal-up" style="--d:.64s">
+      <button type="button" data-jump="demos" class="btn btn--primary hero-cta reveal-up" style="--d:.5s">
         Explore live demos <i data-lucide="arrow-up-right"></i>
       </button>
     </div>
