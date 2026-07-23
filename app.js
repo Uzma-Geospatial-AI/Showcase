@@ -561,7 +561,7 @@ function initMap() {
 const HERO_PMTILES = 'https://digitalearthbasemap.s3.ap-southeast-1.amazonaws.com/kuantan1.pmtiles';
 const KUANTAN_BOUNDS = [[3.68953, 103.253], [3.8887, 103.361]];
 function initHeroMap() {
-  if (typeof L === 'undefined' || !$('#hero-map')) return;
+  if (typeof L === 'undefined' || typeof pmtiles === 'undefined' || !$('#hero-map')) return;
   const bounds = L.latLngBounds(KUANTAN_BOUNDS);
   const map = L.map('hero-map', {
     zoomControl: false,
@@ -573,47 +573,45 @@ function initHeroMap() {
   });
   map.attributionControl.setPrefix(false);
 
-  // Reliable satellite base — Esri World Imagery loads as plain image tiles
-  // (no CORS handshake), so it works on any origin / GitHub Pages.
-  L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { maxZoom: 19, attribution: 'Imagery © Esri · Uzma Digital Earth' }
-  ).addTo(map);
+  // Original UzmaSat imagery, straight from the Digital Earth PMTiles archive.
+  const archive = new pmtiles.PMTiles(HERO_PMTILES);
+  let anyTile = false;
+  const PMLayer = L.GridLayer.extend({
+    createTile(coords, done) {
+      const img = document.createElement('img');
+      img.alt = '';
+      archive
+        .getZxy(coords.z, coords.x, coords.y)
+        .then((res) => {
+          if (!res || !res.data) { done(null, img); return; }
+          const url = URL.createObjectURL(new Blob([res.data]));
+          img.onload = () => { URL.revokeObjectURL(url); anyTile = true; done(null, img); };
+          img.onerror = () => { URL.revokeObjectURL(url); done(null, img); };
+          img.src = url;
+        })
+        .catch((err) => done(err, img));
+      return img;
+    },
+  });
+  new PMLayer({ minZoom: 8, maxZoom: 18, bounds, attribution: 'UzmaSat-1 · Uzma Digital Earth' }).addTo(map);
 
   // Open zoomed straight in to level 15 over Kuantan.
   map.setView(bounds.getCenter(), 15);
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-  // Try to overlay the exact UzmaSat PMTiles archive on top. This only renders
-  // where the S3 bucket's CORS allowlist includes the current origin
-  // (localhost + vision.uzmadigitalearth.app today). If the header fetch is
-  // blocked, we silently keep the Esri base — no broken tiles, no black box.
-  if (typeof pmtiles !== 'undefined') {
-    const archive = new pmtiles.PMTiles(HERO_PMTILES);
-    archive
-      .getHeader()
-      .then(() => {
-        const PMLayer = L.GridLayer.extend({
-          createTile(coords, done) {
-            const img = document.createElement('img');
-            img.alt = '';
-            archive
-              .getZxy(coords.z, coords.x, coords.y)
-              .then((res) => {
-                if (!res || !res.data) { done(null, img); return; }
-                const url = URL.createObjectURL(new Blob([res.data]));
-                img.onload = () => { URL.revokeObjectURL(url); done(null, img); };
-                img.onerror = () => { URL.revokeObjectURL(url); done(null, img); };
-                img.src = url;
-              })
-              .catch((err) => done(err, img));
-            return img;
-          },
-        });
-        new PMLayer({ minZoom: 8, maxZoom: 18, bounds, attribution: 'UzmaSat-1 · Digital Earth' }).addTo(map);
-      })
-      .catch(() => {/* origin not in S3 CORS allowlist — Esri base stays */});
-  }
+  // If the S3 bucket's CORS allowlist doesn't include this origin the tiles are
+  // blocked — show a small note (instead of a black box) so it's clear why.
+  setTimeout(() => {
+    if (anyTile) return;
+    const el = $('#hero-map');
+    if (!el) return;
+    el.innerHTML =
+      '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;text-align:center;padding:1.1rem;color:#cfcfd2;font-size:.76rem">' +
+      '<i data-lucide="satellite" style="color:#ff8a4d;width:1.5rem;height:1.5rem"></i>' +
+      '<div>UzmaSat-1 tiles · <strong>Kuantan</strong></div>' +
+      '<div style="color:#8f8f95;font-size:.66rem">Enable this domain in the tile CORS allowlist to display</div></div>';
+    refreshIcons();
+  }, 6000);
 
   const coordsEl = $('#hero-map-coords');
   const fmt = (n, pos, neg) => `${Math.abs(n).toFixed(3)}°${n >= 0 ? pos : neg}`;
