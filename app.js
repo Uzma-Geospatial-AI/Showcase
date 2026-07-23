@@ -521,26 +521,40 @@ function demoInto(container, p) {
 }
 
 function buildDemos() {
-  const suitesWrap = $('#demo-tabs'); // reused as the top-level suite selector
+  const flagWrap = $('#demo-flagship');
+  const suitesWrap = $('#demo-tabs'); // the GAI-suite selector (flagship lives above it)
   const panel = $('#demo-panel');
   if (!suitesWrap || !panel) return;
 
-  // Top-level entries: the flagship first, then the five suites.
   const flagship = platforms.find((p) => p.id === FLAGSHIP_ID);
-  const groups = [{ id: FLAGSHIP_ID, name: flagship ? flagship.title : 'UZMAVision', flag: true }, ...suites];
-
   let activeGroup = FLAGSHIP_ID;
   let activeDemo = null;
 
   const render = () => {
-    // ---- suite selector ----
-    suitesWrap.innerHTML = '';
-    groups.forEach((g) => {
-      const btn = el(
-        `<button type="button" class="demo-suite${g.id === activeGroup ? ' demo-suite--active' : ''}${g.flag ? ' demo-suite--flag' : ''}">${g.flag ? '<i data-lucide="satellite"></i>' : ''}${g.name}</button>`
+    // ---- flagship, on its own above the suites ----
+    if (flagWrap && flagship) {
+      flagWrap.innerHTML = '';
+      const active = activeGroup === FLAGSHIP_ID;
+      const card = el(
+        `<button type="button" class="demo-flag-card${active ? ' demo-flag-card--active' : ''}">
+          <span class="demo-flag-card__badge ${flagship.accent}"><i data-lucide="${flagship.icon}"></i></span>
+          <span class="demo-flag-card__text">
+            <span class="demo-flag-card__name">${flagship.title}<span class="demo-flag-card__pill">Flagship</span></span>
+            <span class="demo-flag-card__sub">${flagship.short}</span>
+          </span>
+          <span class="demo-flag-card__cta">${active ? 'Viewing' : 'View platform'} <i data-lucide="arrow-up-right"></i></span>
+        </button>`
       );
+      card.addEventListener('click', () => { activeGroup = FLAGSHIP_ID; activeDemo = null; render(); });
+      flagWrap.appendChild(card);
+    }
+
+    // ---- GAI suite selector (the five suites only) ----
+    suitesWrap.innerHTML = '';
+    suites.forEach((s) => {
+      const btn = el(`<button type="button" class="demo-suite${s.id === activeGroup ? ' demo-suite--active' : ''}">${s.name}</button>`);
       btn.addEventListener('click', () => {
-        activeGroup = g.id;
+        activeGroup = s.id;
         activeDemo = null;
         render();
       });
