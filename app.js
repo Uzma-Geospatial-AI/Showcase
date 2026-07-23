@@ -67,6 +67,18 @@ const platforms = [
     url: 'https://iot.uzmadigitalearth.app/',
     tag: 'IoT · Satellite',
   },
+  {
+    id: 'vision',
+    title: 'UZMA-Vision',
+    short: 'Live satellite intelligence on an interactive 3D map.',
+    description:
+      'Satellite Intelligence Platform streaming live UzmaSat-1 feeds onto an interactive 3D map — real-time earth observation, layered geospatial analytics, and multi-region monitoring across Malaysia.',
+    icon: 'globe-lock',
+    accent: 'grad-1',
+    features: ['Live UzmaSat-1 feed', '3D layer mapping', 'Real-time visualization', 'Multi-region coverage'],
+    url: 'https://vision.uzmadigitalearth.app/',
+    tag: 'Satellite · Real-time',
+  },
 ];
 
 const techStack = ['Python', 'FastAPI', 'Leaflet', 'GeoPandas', 'PyTorch', 'Rasterio', 'QGIS', 'PostGIS', 'Machine Learning', 'Remote Sensing', 'HTML', 'CSS', 'SQL', 'Java', 'JavaScript', 'Node.js'];
@@ -99,7 +111,7 @@ const metrics = [
 ];
 
 const heroStats = [
-  { value: '5', label: 'Platforms' },
+  { value: '6', label: 'Platforms' },
   { value: 'AI', label: 'Analytics' },
   { value: '24/7', label: 'Satellite Monitoring' },
   { value: 'WebGIS', label: 'Interactive GIS' },
@@ -114,7 +126,7 @@ const navItems = [
   { label: 'Contact', target: 'contact' },
 ];
 
-const demoTabLabels = { palmgrove: 'PalmGrove', footprint: 'Building Footprint', border: 'Border Visualization', mspo: 'MSPO Monitoring', spacein: 'SpaceIn' };
+const demoTabLabels = { palmgrove: 'PalmGrove', footprint: 'Building Footprint', border: 'Border Visualization', mspo: 'MSPO Monitoring', spacein: 'SpaceIn', vision: 'UZMA-Vision' };
 
 // Footer "Connect" links — rendered by JS (each <li> parsed individually) so a
 // long run of inline-SVG siblings can't trip up the HTML parser.
@@ -152,7 +164,7 @@ function applyTheme(theme) {
 }
 function initTheme() {
   const stored = localStorage.getItem(STORAGE_KEY);
-  applyTheme(stored === 'light' || stored === 'dark' ? stored : 'light');
+  applyTheme(stored === 'light' || stored === 'dark' ? stored : 'dark');
   $('#theme-toggle').addEventListener('click', () => {
     applyTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark');
   });
