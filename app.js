@@ -67,6 +67,31 @@ const platforms = [
     url: 'https://iot.uzmadigitalearth.app/',
     tag: 'IoT · Satellite',
   },
+  {
+    id: 'vision',
+    title: 'UZMAVision',
+    short: 'The unified satellite-intelligence platform.',
+    description:
+      'The flagship platform that brings every Uzma geospatial-AI suite together — live UzmaSat-1 imagery, layered spatial analytics, and multi-region monitoring on one interactive map.',
+    icon: 'satellite',
+    accent: 'grad-1',
+    features: ['Live UzmaSat-1 feed', 'All GAI suites in one', '3D layer mapping', 'Multi-region coverage'],
+    url: 'https://vision.uzmadigitalearth.app/',
+    tag: 'Flagship · Real-time',
+  },
+];
+
+// The flagship platform that sits above every suite.
+const FLAGSHIP_ID = 'vision';
+
+// Five geospatial-AI suites. `demos` lists the platform ids grouped under each
+// (empty suites render as "coming soon").
+const suites = [
+  { id: 'urban', name: 'UrbanGAI', tagline: 'Cities, buildings & infrastructure intelligence', icon: 'building-2', accent: 'grad-1', demos: ['footprint', 'border'] },
+  { id: 'agro', name: 'AgroGAI', tagline: 'Agriculture, plantations & ESG monitoring', icon: 'sprout', accent: 'grad-2', demos: ['palmgrove', 'mspo', 'spacein'] },
+  { id: 'estate', name: 'EstateGAI', tagline: 'Land use & estate management', icon: 'trees', accent: 'grad-3', demos: [] },
+  { id: 'insar', name: 'InsarGAI', tagline: 'InSAR ground deformation & subsidence', icon: 'radar', accent: 'grad-1', demos: [] },
+  { id: 'drone', name: 'DroneGAI', tagline: 'Drone & UAV aerial mapping', icon: 'plane', accent: 'grad-2', demos: [] },
 ];
 
 const techStack = ['Python', 'FastAPI', 'Leaflet', 'GeoPandas', 'PyTorch', 'Rasterio', 'QGIS', 'PostGIS', 'Machine Learning', 'Remote Sensing', 'HTML', 'CSS', 'SQL', 'Java', 'JavaScript', 'Node.js'];
@@ -113,8 +138,6 @@ const navItems = [
   { label: 'Applications', target: 'applications' },
   { label: 'Contact', target: 'contact' },
 ];
-
-const demoTabLabels = { palmgrove: 'PalmGrove', footprint: 'Building Footprint', border: 'Border Visualization', mspo: 'MSPO Monitoring', spacein: 'SpaceIn' };
 
 // Footer "Connect" links — rendered by JS (each <li> parsed individually) so a
 // long run of inline-SVG siblings can't trip up the HTML parser.
@@ -256,26 +279,61 @@ function buildHeroStats() {
   });
 }
 
-/* ----------------------------- Solutions ----------------------------- */
+/* ----------------------------- Solutions (flagship + GAI suites) ----------------------------- */
 function buildSolutions() {
   const grid = $('#solutions-grid');
-  platforms.forEach((p) => {
-    const features = p.features
-      .map((f) => `<li class="feature"><span class="feature__dot ${p.accent}"></span>${f}</li>`)
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  // 1) Flagship — UZMAVision, above everything.
+  const v = platforms.find((p) => p.id === FLAGSHIP_ID);
+  if (v) {
+    const features = v.features
+      .map((f) => `<li class="feature"><span class="feature__dot ${v.accent}"></span>${f}</li>`)
       .join('');
     grid.appendChild(
-      el(`<article class="solution-card reveal">
-        <div class="solution-card__glow ${p.accent}"></div>
-        <div class="solution-card__head">
-          <span class="badge ${p.accent}"><i data-lucide="${p.icon}"></i></span>
-          <span class="tag">${p.tag}</span>
+      el(`<article class="flagship reveal">
+        <div class="flagship__glow ${v.accent}"></div>
+        <div class="flagship__main">
+          <span class="flagship__badge ${v.accent}"><i data-lucide="${v.icon}"></i></span>
+          <div>
+            <span class="tag">${v.tag}</span>
+            <h3>${v.title}</h3>
+            <p>${v.description}</p>
+            <ul class="feature-list">${features}</ul>
+          </div>
         </div>
-        <h3>${p.title}</h3>
-        <p>${p.description}</p>
-        <ul class="feature-list">${features}</ul>
-        <div class="solution-card__actions">
-          <a href="#/demos/${p.id}" class="launch-btn">Launch Demo <i data-lucide="arrow-up-right"></i></a>
+        <div class="flagship__aside">
+          <div class="flagship__label">One platform · five GAI suites</div>
+          <a href="#/demos/${v.id}" class="btn btn--primary">Open ${v.title} <i data-lucide="arrow-up-right"></i></a>
+          <a href="#demos" data-jump="demos" class="launch-btn">Browse all suites <i data-lucide="arrow-down"></i></a>
         </div>
+      </article>`)
+    );
+  }
+
+  // 2) The five GAI suites.
+  suites.forEach((s) => {
+    const demoLinks = s.demos
+      .map((id) => {
+        const p = platforms.find((x) => x.id === id);
+        return p
+          ? `<li><a href="#/demos/${p.id}" class="suite-demo"><span class="feature__dot ${s.accent}"></span>${p.title}<i data-lucide="arrow-up-right"></i></a></li>`
+          : '';
+      })
+      .join('');
+    const body = s.demos.length
+      ? `<ul class="suite-card__demos">${demoLinks}</ul>`
+      : `<div class="suite-card__soon"><i data-lucide="sparkles"></i> New suite — launching soon</div>`;
+    grid.appendChild(
+      el(`<article class="suite-card reveal">
+        <div class="suite-card__head">
+          <span class="badge ${s.accent}"><i data-lucide="${s.icon}"></i></span>
+          <span class="suite-card__count">${s.demos.length ? `${s.demos.length} demo${s.demos.length > 1 ? 's' : ''}` : 'Coming soon'}</span>
+        </div>
+        <h3>${s.name}</h3>
+        <p>${s.tagline}</p>
+        ${body}
       </article>`)
     );
   });
@@ -450,35 +508,92 @@ function secureGate(platform, height = 'min(78vh, 720px)') {
   </div>`);
 }
 
-/* ----------------------------- Interactive demo tabs ----------------------------- */
+/* ----------------------------- Interactive demos (flagship → suites → demos) ----------------------------- */
+function demoInto(container, p) {
+  container.appendChild(
+    el(`<div class="demo-head">
+      <div class="demo-head__tag">${p.tag}</div>
+      <h3>${p.title}</h3>
+      <p>${p.short}</p>
+    </div>`)
+  );
+  container.appendChild(p.secure ? secureGate(p) : iframeFrame(p.url, p.title));
+}
+
 function buildDemos() {
-  const tabsWrap = $('#demo-tabs');
+  const suitesWrap = $('#demo-tabs'); // reused as the top-level suite selector
   const panel = $('#demo-panel');
-  let active = 'footprint'; // default to the first demo tab
+  if (!suitesWrap || !panel) return;
+
+  // Top-level entries: the flagship first, then the five suites.
+  const flagship = platforms.find((p) => p.id === FLAGSHIP_ID);
+  const groups = [{ id: FLAGSHIP_ID, name: flagship ? flagship.title : 'UZMAVision', flag: true }, ...suites];
+
+  let activeGroup = FLAGSHIP_ID;
+  let activeDemo = null;
 
   const render = () => {
-    tabsWrap.innerHTML = '';
-    platforms.forEach((p) => {
-      const btn = el(`<button type="button" class="demo-tab${p.id === active ? ' demo-tab--active' : ''}">${demoTabLabels[p.id]}</button>`);
+    // ---- suite selector ----
+    suitesWrap.innerHTML = '';
+    groups.forEach((g) => {
+      const btn = el(
+        `<button type="button" class="demo-suite${g.id === activeGroup ? ' demo-suite--active' : ''}${g.flag ? ' demo-suite--flag' : ''}">${g.flag ? '<i data-lucide="satellite"></i>' : ''}${g.name}</button>`
+      );
       btn.addEventListener('click', () => {
-        active = p.id;
+        activeGroup = g.id;
+        activeDemo = null;
         render();
       });
-      tabsWrap.appendChild(btn);
+      suitesWrap.appendChild(btn);
     });
 
-    const current = platforms.find((p) => p.id === active);
     panel.innerHTML = '';
-    panel.appendChild(
-      el(`<div class="demo-head">
-        <div class="demo-head__tag">${current.tag}</div>
-        <h3>${current.title}</h3>
-        <p>${current.short}</p>
-      </div>`)
-    );
-    panel.appendChild(current.secure ? secureGate(current) : iframeFrame(current.url, current.title));
+
+    // ---- flagship selected → its demo directly ----
+    if (activeGroup === FLAGSHIP_ID) {
+      if (flagship) demoInto(panel, flagship);
+      refreshIcons();
+      return;
+    }
+
+    // ---- a suite selected ----
+    const suite = suites.find((s) => s.id === activeGroup);
+    if (!suite.demos.length) {
+      panel.appendChild(
+        el(`<div class="demo-empty">
+          <span class="badge ${suite.accent}"><i data-lucide="${suite.icon}"></i></span>
+          <h3>${suite.name}</h3>
+          <p>${suite.tagline}</p>
+          <div class="demo-empty__soon"><i data-lucide="sparkles"></i> Live demo launching soon</div>
+        </div>`)
+      );
+      refreshIcons();
+      return;
+    }
+
+    if (!activeDemo || !suite.demos.includes(activeDemo)) activeDemo = suite.demos[0];
+
+    // sub-tabs for the suite's demos
+    const subWrap = el('<div class="demo-subtabs"></div>');
+    suite.demos.forEach((id) => {
+      const p = platforms.find((x) => x.id === id);
+      if (!p) return;
+      const btn = el(`<button type="button" class="demo-tab${id === activeDemo ? ' demo-tab--active' : ''}">${p.title}</button>`);
+      btn.addEventListener('click', () => {
+        activeDemo = id;
+        render();
+      });
+      subWrap.appendChild(btn);
+    });
+    panel.appendChild(subWrap);
+
+    const current = platforms.find((p) => p.id === activeDemo);
+    const box = el('<div class="demo-box"></div>');
+    demoInto(box, current);
+    panel.appendChild(box);
     refreshIcons();
   };
+
   render();
 }
 

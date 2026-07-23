@@ -696,7 +696,77 @@ html.dark .hero-scroll { color: #f5f5f7; }
 @media (prefers-reduced-motion: reduce) {
   html.js .reveal { opacity: 1; transform: none; transition: none; }
   .reveal-up { opacity: 1; animation: none; }
-  .hero-sat, .hero-dots, .hero-obj__pulse, .hero-scroll { animation: none !important; }
+  .hero-sat, .hero-dots, .hero-sat__ring, .hero-scroll { animation: none !important; }
   .hero-sat { transform: rotate(225deg); }
   .hero-arrow path { stroke-dashoffset: 0; animation: none; }
 }
+
+/* =========================================================================
+   15. Flagship (UZMAVision) + GAI suites + two-level demo browser
+   ========================================================================= */
+.flagship {
+  grid-column: 1 / -1;
+  position: relative; overflow: hidden;
+  display: grid; gap: 2rem; align-items: center;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(242, 106, 42, 0.4);
+  background:
+    radial-gradient(90% 130% at 100% 0%, rgba(242, 106, 42, 0.14), transparent 55%),
+    var(--surface-solid);
+  padding: 2.3rem;
+  box-shadow: var(--shadow-card);
+}
+@media (min-width: 900px) { .flagship { grid-template-columns: 1.7fr 0.9fr; padding: 2.9rem; } }
+.flagship__glow { position: absolute; right: -4rem; top: -4rem; width: 16rem; height: 16rem; border-radius: 999px; opacity: 0.22; filter: blur(62px); pointer-events: none; }
+.flagship__main { position: relative; z-index: 1; display: flex; gap: 1.4rem; align-items: flex-start; }
+.flagship__badge { display: inline-flex; height: 3.5rem; width: 3.5rem; flex-shrink: 0; align-items: center; justify-content: center; border-radius: 1rem; color: #fff; box-shadow: var(--shadow-glow); }
+.flagship__badge i { width: 1.6rem; height: 1.6rem; }
+.flagship h3 { margin: 0.5rem 0 0; font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; letter-spacing: -0.025em; text-transform: uppercase; color: var(--text-strong); }
+.flagship p { margin-top: 0.6rem; font-size: 1rem; line-height: 1.6; color: var(--text-muted); max-width: 42rem; }
+.flagship .feature-list { max-width: 34rem; }
+.flagship__aside { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.9rem; }
+.flagship__label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.flagship__aside .btn { width: 100%; }
+
+/* suite cards */
+.suite-card {
+  position: relative; display: flex; flex-direction: column; overflow: hidden;
+  border-radius: var(--radius-lg); border: 1px solid var(--border);
+  background: var(--surface-solid); padding: 1.9rem; box-shadow: var(--shadow-card);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+.suite-card:hover { transform: translateY(-6px); border-color: rgba(242, 106, 42, 0.45); box-shadow: var(--shadow-card-hover); }
+.suite-card__head { display: flex; align-items: center; justify-content: space-between; }
+.suite-card__count { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border); border-radius: 999px; padding: 0.28rem 0.65rem; }
+.suite-card h3 { margin: 1.2rem 0 0; font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; text-transform: uppercase; color: var(--text-strong); }
+.suite-card > p { margin-top: 0.5rem; font-size: 0.92rem; line-height: 1.55; color: var(--text-muted); }
+.suite-card__demos { margin: 1.3rem 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.suite-demo { display: flex; align-items: center; gap: 0.55rem; padding: 0.6rem 0.8rem; border-radius: 0.7rem; border: 1px solid var(--border); font-size: 0.9rem; font-weight: 500; color: var(--text-300); transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease; }
+.suite-demo i { width: 0.9rem; height: 0.9rem; margin-left: auto; color: var(--text-faint); transition: color 0.2s ease, transform 0.2s ease; }
+.suite-demo:hover { border-color: rgba(242, 106, 42, 0.45); background: rgba(242, 106, 42, 0.06); color: var(--text-strong); }
+.suite-demo:hover i { color: var(--accent); transform: translate(2px, -2px); }
+.suite-card__soon { margin-top: 1.3rem; display: inline-flex; align-items: center; gap: 0.45rem; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; color: var(--text-muted); border: 1px dashed var(--border-strong); border-radius: 0.7rem; padding: 0.75rem 0.9rem; }
+.suite-card__soon i { width: 1rem; height: 1rem; color: var(--accent); }
+
+/* demo suite selector (top level) */
+.demo-suite {
+  display: inline-flex; align-items: center; gap: 0.4rem; border: none; background: transparent;
+  border-radius: 999px; padding: 0.6rem 1.1rem; font-family: var(--font-mono); font-size: 0.8rem;
+  font-weight: 500; letter-spacing: 0.02em; color: var(--text-muted);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.demo-suite i { width: 0.95rem; height: 0.95rem; }
+.demo-suite:hover { color: var(--text-strong); }
+.demo-suite--flag { color: var(--accent); font-weight: 600; }
+.demo-suite--active { background: var(--accent); color: #16130c; }
+
+/* demo sub-tabs (within a suite) */
+.demo-subtabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin-bottom: 2rem; }
+
+/* empty suite panel */
+.demo-empty { max-width: 34rem; margin: 1rem auto 0; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.7rem; padding: 3rem 1.5rem; border: 1px dashed var(--border-strong); border-radius: var(--radius-lg); }
+.demo-empty .badge { height: 3.25rem; width: 3.25rem; border-radius: 1rem; }
+.demo-empty h3 { margin: 0.5rem 0 0; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: -0.02em; color: var(--text-strong); }
+.demo-empty p { margin: 0; color: var(--text-muted); }
+.demo-empty__soon { margin-top: 0.5rem; display: inline-flex; align-items: center; gap: 0.45rem; font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
+.demo-empty__soon i { width: 1rem; height: 1rem; }
