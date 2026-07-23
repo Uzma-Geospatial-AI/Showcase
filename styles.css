@@ -277,7 +277,7 @@ html.dark .logo-light { display: none; }
   min-height: 100svh;
   overflow: hidden;
   isolation: isolate;
-  background: linear-gradient(100deg, #ffffff 0 49.5%, var(--accent) 49.5% 100%);
+  background: linear-gradient(to right, #ffffff 0 50%, var(--accent) 50% 100%);
 }
 
 /* decorative accents */
@@ -311,24 +311,18 @@ html.dark .logo-light { display: none; }
   white-space: nowrap;
 }
 
-/* central upright satellite — sits ON the seam so the divide cuts it in half */
-.hero-sat-wrap {
-  position: absolute; z-index: 2;
-  left: 49.5%; top: 45%; transform: translate(-50%, -50%);
-  width: min(38vw, 430px); aspect-ratio: 1;
-  display: grid; place-items: center;
-  pointer-events: none;
+/* big satellite clipped to the white half — cut cleanly at the seam, upright,
+   lens (round telescope) pointing down toward Earth */
+.hero-sat-clip {
+  position: absolute; z-index: 1;
+  left: 0; top: 0; bottom: 0; width: 50%;
+  overflow: hidden; pointer-events: none;
 }
-.hero-sat__ring {
-  position: absolute; inset: 3%; border-radius: 50%;
-  border: 1.5px dashed rgba(242, 106, 42, 0.5);
-  animation: heroRing 48s linear infinite;
-}
-.hero-sat__ring::after { content: ''; position: absolute; inset: 15%; border: 1px dashed rgba(242, 106, 42, 0.28); border-radius: 50%; }
 .hero-sat {
-  position: relative; z-index: 1; width: 78%; height: auto;
-  transform: rotate(45deg);
-  filter: drop-shadow(0 26px 42px rgba(0, 0, 0, 0.42));
+  position: absolute; top: 47%; left: 100%;
+  width: min(56vw, 660px); height: auto;
+  transform: translate(-50%, -50%) rotate(225deg);
+  filter: drop-shadow(0 30px 48px rgba(0, 0, 0, 0.42));
   animation: heroSatFloat 7s ease-in-out infinite;
 }
 
@@ -407,7 +401,7 @@ html.dark .hero-cta.btn--primary:hover { background: #000; }
 /* hero animations */
 .reveal-up { opacity: 0; animation: heroUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: var(--d, 0s); }
 @keyframes heroUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
-@keyframes heroSatFloat { 0%, 100% { transform: rotate(45deg) translateY(0); } 50% { transform: rotate(45deg) translateY(-16px); } }
+@keyframes heroSatFloat { 0%, 100% { transform: translate(-50%, -50%) rotate(225deg); } 50% { transform: translate(-50%, calc(-50% - 16px)) rotate(225deg); } }
 @keyframes heroRing { to { transform: rotate(360deg); } }
 @keyframes heroDots { 0%, 100% { opacity: 0.85; } 50% { opacity: 0.4; } }
 @keyframes heroPulse { 0% { box-shadow: 0 0 0 0 rgba(53, 208, 127, 0.6); } 70% { box-shadow: 0 0 0 8px rgba(53, 208, 127, 0); } 100% { box-shadow: 0 0 0 0 rgba(53, 208, 127, 0); } }
@@ -418,14 +412,15 @@ html.dark .hero-cta.btn--primary:hover { background: #000; }
    above an orange block (Live Data + map) */
 @media (max-width: 900px) {
   .hero.hero--split { display: flex; flex-direction: column; min-height: auto; background: #ffffff; padding-top: 5.5rem; }
-  .hero-sat-wrap { position: static; transform: none; width: min(66vw, 280px); margin: 0.5rem auto 0; }
+  .hero-sat-clip { position: static; width: auto; height: auto; overflow: visible; display: grid; place-items: center; margin: 0.5rem auto 0; }
+  .hero-sat { position: static; width: min(58vw, 240px); transform: rotate(225deg); animation: none; }
   .hero-grid { display: flex; flex-direction: column; min-height: 0; padding: 0; }
   .hero-col { align-items: center; text-align: center; }
   .hero-col--l { order: 1; padding: 1.5rem 1.4rem 2.5rem; }
   .hero-col--r { order: 2; padding: 3rem 1.4rem 3.5rem; background: var(--accent); }
   .hero-lead { text-align: center; margin-inline: auto; }
   .hero-map-card { margin-inline: auto; }
-  .hero-side, .hero-scroll, .hero-dots, .hero-corner, .hero-sat__ring { display: none; }
+  .hero-side, .hero-scroll, .hero-dots, .hero-corner { display: none; }
   .hero-pager { color: rgba(28, 15, 6, 0.5); }
   .hero-pager .on { color: var(--ink); }
   .hero-title { font-size: clamp(2.6rem, 8vw, 4.2rem); }
@@ -684,7 +679,7 @@ html.dark .map-fs-btn:hover { background: rgba(0, 0, 0, 0.9); }
 html.dark .solution-card::before { -webkit-text-stroke: 1px rgba(255, 255, 255, 0.14); }
 html.dark ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); }
 /* hero night mode — left half of the split goes dark, orange stays */
-html.dark .hero.hero--split { background: linear-gradient(100deg, #0a0a0c 0 49.5%, var(--accent) 49.5% 100%); }
+html.dark .hero.hero--split { background: linear-gradient(to right, #0a0a0c 0 50%, var(--accent) 50% 100%); }
 html.dark .hero-title, html.dark .hero-title--right { color: #f5f5f7; }
 html.dark .hero-see { color: #f5f5f7; }
 html.dark .hero-stripes { background: repeating-linear-gradient(-45deg, #f5f5f7 0 7px, transparent 7px 14px); opacity: 0.45; }
@@ -696,6 +691,6 @@ html.dark .hero-scroll { color: #f5f5f7; }
   html.js .reveal { opacity: 1; transform: none; transition: none; }
   .reveal-up { opacity: 1; animation: none; }
   .hero-sat, .hero-dots, .hero-obj__pulse, .hero-scroll { animation: none !important; }
-  .hero-sat { transform: rotate(-24deg); }
+  .hero-sat { transform: translate(-50%, -50%) rotate(225deg); }
   .hero-arrow path { stroke-dashoffset: 0; animation: none; }
 }

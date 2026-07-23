@@ -580,8 +580,8 @@ function initHeroMap() {
     { maxZoom: 19, attribution: 'Imagery © Esri · Uzma Digital Earth' }
   ).addTo(map);
 
-  // Open zoomed straight in to level 16 over Kuantan.
-  map.setView(bounds.getCenter(), 16);
+  // Open zoomed straight in to level 15 over Kuantan.
+  map.setView(bounds.getCenter(), 15);
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
   // Try to overlay the exact UzmaSat PMTiles archive on top. This only renders
